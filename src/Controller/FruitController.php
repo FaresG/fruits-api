@@ -9,6 +9,7 @@ use App\Form\FruitType;
 use App\Repository\FruitRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -19,23 +20,21 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FruitController extends AbstractController
 {
-    private FruitRepository $fruitRepository;
-
     public function __construct(HttpClientInterface $client, SerializerInterface $serializer, FruitRepository $fruitRepository)
     {
+        $this->fruitRepository = $fruitRepository;
         $this->client = $client;
         $this->serializer = $serializer;
-        $this->fruitRepository = $fruitRepository;
     }
 
     #[Route('/', name: 'app_fruit_index')]
-    public function index(Request $request, FruitRepository $fruitRepository): Response
+    public function index(Request $request): Response
     {
         $data = new FilterData();
         $data->page = $request->get('page', 1);
         $form = $this->createForm(FilterFormType::class, $data);
         $form->handleRequest($request);
-        $fruits = $fruitRepository->findFilter($data);
+        $fruits = $this->fruitRepository->findFilter($data);
         return $this->render('fruit/index.html.twig',[
             'fruits' => $fruits,
             'form' => $form->createView()
@@ -57,7 +56,10 @@ class FruitController extends AbstractController
             $fruit = $this->serializer->deserialize(json_encode($fruit), Fruit::class, 'json');
             $this->fruitRepository->save($fruit, true);
         }
-        return new Response('ok', 201);
+
+        $this->addFlash('success', 'Fetched Fruits are successfully added!');
+
+        return $this->redirectToRoute('app_fruit_index');
     }
 
     #[Route('/fruit/new', name: 'app_fruit_new')]
@@ -84,13 +86,6 @@ class FruitController extends AbstractController
 
         return $this->renderForm('fruit/new.html.twig', [
             'form' => $form,
-        ]);
-    }
-
-    #[Route('/fruit/favorites', name: 'app_fruit_favorites')]
-    public function favorite() : Response
-    {
-        return $this->render('fruit/favorites.html.twig',[
         ]);
     }
 }

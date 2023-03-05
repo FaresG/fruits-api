@@ -62,4 +62,17 @@ class FruitRepository extends ServiceEntityRepository
             10
         );
     }
+
+    public function findFavorite(int $pageNumber): PaginationInterface
+    {
+        $query = $this->createQueryBuilder('f');
+        $query = $query->andWhere('f.favorite = true');
+        $query->getQuery();
+
+        return $this->paginator->paginate(
+            $query,
+            $pageNumber,
+            10
+        );
+    }
 }

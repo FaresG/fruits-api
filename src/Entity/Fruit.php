@@ -29,6 +29,9 @@ class Fruit
     #[ORM\JoinColumn(nullable: false)]
     private ?Nutrition $nutritions = null;
 
+    #[ORM\Column]
+    private ?bool $favorite = false;
+
 
     public function getId(): ?int
     {
@@ -98,6 +101,18 @@ class Fruit
     public function setNutritions(Nutrition $nutritions): self
     {
         $this->nutritions = $nutritions;
+
+        return $this;
+    }
+
+    public function isFavorite(): ?bool
+    {
+        return $this->favorite;
+    }
+
+    public function setFavorite(bool $favorite): self
+    {
+        $this->favorite = $favorite;
 
         return $this;
     }

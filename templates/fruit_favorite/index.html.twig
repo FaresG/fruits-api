@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Favorite Fruits{% endblock %}
+
+{% block content %}
+    <h2 class="font-sans text-2xl antialiased text-teal-900 mb-10">Favorites</h2>
+    {% include 'fruit/_table.html.twig' %}
+
+    {{ knp_pagination_render(fruits) }}
+{% endblock %}
