@@ -10,6 +10,8 @@ use App\Repository\FruitRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -59,9 +61,9 @@ class FruitController extends AbstractController
     }
 
     #[Route('/fruit/new', name: 'app_fruit_new')]
-    public function new(Request $request) : Response
+    public function new(Request $request, MailerInterface $mailer) : Response
     {
-        $fruit = new Fruit;
+        $fruit = new Fruit();
         $form = $this->createForm(FruitType::class, $fruit);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -69,7 +71,17 @@ class FruitController extends AbstractController
             $this->fruitRepository->save($fruit, true);
 
             $this->addFlash('success', 'New fruit added!');
+
+            // send notification email
+            $email = (new Email())
+                ->from('notifications@fruits.com')
+                ->to('admin@fruits.com')
+                ->priority(Email::PRIORITY_HIGH)
+                ->subject('Notification')
+                ->text('The fruit has been added!');
+            $mailer->send($email);
         }
+
         return $this->renderForm('fruit/new.html.twig', [
             'form' => $form,
         ]);
