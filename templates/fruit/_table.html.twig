@@ -1,0 +1,42 @@
+<div class="max-h-screen border-solid border border-slate-800/25 mt-10 mb-10 w-4/5 not-prose relative bg-slate-50 rounded-xl overflow-scroll overscroll-auto dark:bg-slate-800/25">
+    <div class="relative rounded-xl overflow-auto">
+        <div class="shadow-sm overflow-hidden mt-8">
+            <table class="relative border-collapse table-fixed w-full text-sm">
+                <thead class="sticky top-0">
+                <tr>
+                    <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">{{ knp_pagination_sortable(fruits, 'ID', 'f.id') }}</th>
+                    <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left {% if fruits.isSorted('f.name') %}sorted{% endif %}">{{ knp_pagination_sortable(fruits, 'Name', 'f.name') }}</th>
+                    <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">Family</th>
+                    <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">Genus</th>
+                    <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">Order</th>
+                    <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">Nutritions</th>
+                    <th class="border-b dark:border-slate-600 font-bold p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for fruit in fruits %}
+                    <tr>
+                        <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ fruit.id }}</td>
+                        <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ fruit.name }}</td>
+                        <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ fruit.family }}</td>
+                        <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ fruit.genus }}</td>
+                        <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ fruit.order }}</td>
+                        <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+                            <ul class="flex flex-col">
+                                <li class="flex flex-row space-between list-disc"><p>Carbohydrates:</p> <p>{{ fruit.nutritions.carbohydrates }}</p></li>
+                                <li class="flex flex-row space-between list-disc"><p>Protein:</p> <p>{{ fruit.nutritions.protein }}</p></li>
+                                <li class="flex flex-row space-between list-disc"><p>Fat:</p> <p>{{ fruit.nutritions.fat }}</p></li>
+                                <li class="flex flex-row space-between list-disc"><p>Calories:</p> <p>{{ fruit.nutritions.calories }}</p></li>
+                                <li class="flex flex-row space-between list-disc"><p>Sugar:</p> <p>{{ fruit.nutritions.sugar }}</p></li>
+                            </ul>
+                        </td>
+                        <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+                            <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Favorite</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

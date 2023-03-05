@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+{% block content %}
+
+    {% include 'fruit/_filter.html.twig' with {form: form} %}
+
+    {% include 'fruit/_table.html.twig' %}
+
+    {{ knp_pagination_render(fruits) }}
+{% endblock %}
